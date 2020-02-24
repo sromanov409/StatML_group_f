@@ -10,13 +10,15 @@ remove_peaks = function(v) {
 }
 
 
-
+# Can change the number below to see different plots.
 x <- X.train[11,]
 ### Plots of the processing if you want to look, still needs work.
 par(mfrow=c(2,1))
 plot(x,type = 'l')
+# Scale it up so the xs are fully positive.
 x <- x+rep(10,30000)
 meanb <- mean(x[1:1000])
+# This is the scaling part, scaled using basic mean method.
 for (i in 2:29) {
   mean <- mean(x[(i*1000):(i*1000+1000)])
   if (mean >= meanb) {
@@ -25,11 +27,13 @@ for (i in 2:29) {
     x[(i*1000 + 1):(i*1000+1000)] = x[(i*1000+1):(i*1000+1000)] + rep(meanb - mean,1000)
   }
 }
+# Translate the x down as it was before
 x <- x-rep(10,30000)
+# This is the normalisation
 x <- scale(x)
 plot(x,type='l')                                           
 
-
+### This is the detection of the peaks
 thresh_per <- 0.6  # Threshold where we consider the peaks, needs optimisation.
 thresh <- thresh_per*(max(x,na.rm=TRUE)) 
 q <- length(x)
